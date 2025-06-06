@@ -61,27 +61,9 @@ This bar plot displays the least frequently used tags in the dataset. These rare
   frameborder="0"
 ></iframe>
 
-This graph details the average rating by binned amounts of minutes that recipes called for.
+This graph details the average rating by binned amounts of minutes that recipes called for. In the notebook, I also plotted number of ingredients against average rating, as well as number of ingredients against rating.
 
-<iframe
-  src="assets/steps_vs_rating.html"
-  width="1000"
-  height="800"
-  frameborder="0"
-></iframe>
-
-This graph details the average rating by the number of steps a recipe took.
-
-<iframe
-  src="assets/ingredients_vs_rating.html"
-  width="1000"
-  height="800"
-  frameborder="0"
-></iframe>
-
-This graph details the average rating by the number of ingredients a recipe took.
-
-Across all of these graphs, there is not alarming/interesting trend, besides the fact that across all of these distributions, the average rating lied around 4.6-4.7 no matter the number of steps, the number of ingredients, or the number of minutes the recipes called for.
+Across all of these graphs, there is no alarming/interesting trend, besides the fact that across all of these distributions, the average rating lied around 4.6-4.7 no matter the number of steps, the number of ingredients, or the number of minutes the recipes called for.
 
 #### Interesting Aggregate
 
@@ -96,7 +78,7 @@ Across all of these graphs, there is not alarming/interesting trend, besides the
 Here, I set the index to the number of ingredients, the columns to the ratings, and the values to the average minutes, and showed only the top 5 rows. This shows the average cooking time for recipes with a given number of ingredients and rating. Under the 5 star rating, there is an obscenely large value of 1617.3 minutes, which suggests there may be outliers of recipes that take large amounts of time to make.
 
 <iframe
-  src="assets/pivot_ingredients_rating_minutes.html"
+  src="assetspivot_ingredients_by_rating.html"
   width="1000"
   height="800"
   frameborder="0"
