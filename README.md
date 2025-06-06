@@ -56,7 +56,7 @@ This bar plot displays the least frequently used tags in the dataset. These rare
 ### Bivariate Analysis
 
 <iframe
-  src="assets/time_vs_rating.html"
+  src="assets/cooking_time_vs_rating.html"
   width="1000"
   height="800"
   frameborder="0"
@@ -171,3 +171,45 @@ This does not prove that no relationship exists, but rather that the observed li
 ></iframe>
 
 Provided is also a plot, showing the distribution of the permuted values, with the dashed red lines showing the negative and positive observed r-values.
+
+## Prediction Problem
+
+Prediction Problem and Type
+I aim to predict a recipe’s rating based on basic properties of the recipe. This is a regression problem, since the response variable-rating—-is continuous.
+
+Response Variable: rating
+
+Justification: Rating is a key indicator of a recipe's success and user satisfaction. Predicting ratings allows us to estimate user preferences for recipes even before they receive reviews.
+
+Model Type: Linear Regression
+
+Linear regression is a simple, interpretable baseline model that assumes a linear relationship between the features and the target.
+
+Features Used for Prediction:
+The following features are available at the time a recipe is posted, which makes them valid predictors:
+
+* minutes: The total time required to prepare the recipe.
+* n_ingredients: The number of ingredients, as a proxy for complexity.
+* n_steps: The number of steps in the recipe instructions.
+
+These are all features that:
+
+1. Are available before any user ratings exist, and
+2. Offer interpretable, numeric inputs that may influence a user’s decision to rate highly or not.
+
+Features not used:
+
+* ID columns (e.g., user_id, recipe_id) are ignored because their numeric values do not have meaningful or predictive relationships with the rating.
+* Dates (submitted, review_date) are excluded because they are either not available at the time of recipe creation or offer little predictive value without additional context.
+
+Time of Prediction Justification:
+
+All selected features are known at the time the recipe is created and posted. This respects the causality principle—no information from future events (like review behavior or user feedback) is used during model training.
+
+Evaluation Metric
+Metric: RMSE (Root Mean Squared Error)
+
+Justification:
+
+* RMSE penalizes large errors more heavily than small ones, making it sensitive to significant deviations.
+* It provides a clear interpretation in the same units as the response variable (ratings), making it easier to explain model performance.
