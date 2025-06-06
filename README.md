@@ -84,6 +84,7 @@ This graph details the average rating by the number of ingredients a recipe took
 Across all of these graphs, there is not alarming/interesting trend, besides the fact that across all of these distributions, the average rating lied around 4.6-4.7 no matter the number of steps, the number of ingredients, or the number of minutes the recipes called for.
 
 #### Interesting Aggregate
+
 |   n_ingredients |   1.0 |   2.0 |   3.0 |   4.0 |    5.0 |
 |----------------:|------:|------:|------:|------:|-------:|
 |               1 | nan   |   5   |   5   |  38.4 |   38.6 |
