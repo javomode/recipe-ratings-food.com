@@ -254,6 +254,7 @@ Planned Next Steps
 ## Final Model and Feature Enhancements
 
 New Features and Rationale
+
 To improve the baseline model, I added:
 
 * time_category (short, medium, long): captures non-linear effects of preparation time
@@ -261,24 +262,28 @@ To improve the baseline model, I added:
 
 These features were made with the idea that they would be more reflective of how users likely rate recipes, based on convenience and complexity, rather than raw numerical values alone.
 
-Model and Evaluation
+### Model and Evaluation
+
 Model: Random Forest Regressor
 
 Why Random Forest: This model handles non-linear relationships and feature interactions well without requiring explicit transformations. It was a better fit for capturing complex relationships in recipe data than linear regression.
-	* I also used an intermediary lasso regression, which showed that the coefficients for time_category and complexity were both zero when the model was predictinng rating linearly from the featuers.
- 	* The change to random forest was in response to finding that there was not a strong linear relationship.
+
+* I also used an intermediary lasso regression, which showed that the coefficients for time_category and complexity were both zero when the model was predictinng rating linearly from the featuers.
+* The change to random forest was in response to finding that there was not a strong linear relationship.
 
 Encoding: One-hot encoding was applied to categorical features
 
 Features Used: n_ingredients, n_steps, time_category, complexity
 
 Hyperparameter Tuning
+
 I used randomized search with cross-validation to tune key hyperparameters (n_estimators, max_depth, etc.). This was more computationally efficient than grid search and still allowed for meaningful performance gains.
 
 Performance
-Baseline Linear Regression RMSE: 0.7139
 
-Final Random Forest RMSE: 0.7075
+* Baseline Linear Regression RMSE: 0.7139
+* Final Random Forest RMSE: 0.7075
 
 Conclusion
+
 The Random Forest model, combined with engineered categorical features, significantly improved predictive performance. The lower RMSE suggests it better captures the true structure of the data and how users rate recipes based on time and complexity.
