@@ -94,4 +94,11 @@ Across all of these graphs, there is not alarming/interesting trend, besides the
 
 Here, I set the index to the number of ingredients, the columns to the ratings, and the values to the average minutes, and showed only the top 5 rows. This shows the average cooking time for recipes with a given number of ingredients and rating. Under the 5 star rating, there is an obscenely large value of 1617.3 minutes, which suggests there may be outliers of recipes that take large amounts of time to make.
 
+<iframe
+  src="assets/pivot_ingredients_rating_minutes.html"
+  width="1000"
+  height="800"
+  frameborder="0"
+></iframe>
+
 This graph visually shows the pivot table, where for the most part, most of the data makes sense, besides the fact that there is a recipe that takes 37 ingredients, and that there are recipes that are skewing the data with extremely large outliers in the minutes column.
