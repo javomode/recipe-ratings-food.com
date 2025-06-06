@@ -78,7 +78,7 @@ Across all of these graphs, there is no alarming/interesting trend, besides the 
 Here, I set the index to the number of ingredients, the columns to the ratings, and the values to the average minutes, and showed only the top 5 rows. This shows the average cooking time for recipes with a given number of ingredients and rating. Under the 5 star rating, there is an obscenely large value of 1617.3 minutes, which suggests there may be outliers of recipes that take large amounts of time to make.
 
 <iframe
-  src="assetspivot_ingredients_by_rating.html"
+  src="assets/pivot_ingredients_by_rating.html"
   width="1000"
   height="800"
   frameborder="0"
