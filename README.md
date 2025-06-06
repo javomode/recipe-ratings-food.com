@@ -51,3 +51,54 @@ This bar plot shows the most frequently used ingredients across all recipes in t
 ></iframe>
 
 This bar plot displays the least frequently used tags in the dataset. These rare tags represent niche or highly specific recipe categories and ingredients, a particular one being: Throw the ultimate fiesta with this sopaipillas recipe from Food.com, which is not longer even a tag anymore, but almost a description. The specificity and uniqueness of these tags highlight less common culinary themes or specialized dishes.
+
+#### Bivariate Analysis
+
+<iframe
+  src="assets/time_vs_rating.html"
+  width="1000"
+  height="800"
+  frameborder="0"
+></iframe>
+
+This graph details the average rating by binned amounts of minutes that recipes called for.
+
+<iframe
+  src="assets/steps_vs_rating.html"
+  width="1000"
+  height="800"
+  frameborder="0"
+></iframe>
+
+This graph details the average rating by the number of steps a recipe took.
+
+<iframe
+  src="assets/ingredients_vs_rating.html"
+  width="1000"
+  height="800"
+  frameborder="0"
+></iframe>
+
+This graph details the average rating by the number of ingredients a recipe took.
+
+Across all of these graphs, there is not alarming/interesting trend, besides the fact that across all of these distributions, the average rating lied around 4.6-4.7 no matter the number of steps, the number of ingredients, or the number of minutes the recipes called for.
+
+#### Interesting Aggregate
+|   n_ingredients |   1.0 |   2.0 |   3.0 |   4.0 |    5.0 |
+|----------------:|------:|------:|------:|------:|-------:|
+|               1 | nan   |   5   |   5   |  38.4 |   38.6 |
+|               2 | 167.1 | 153.7 |  96.9 | 136.9 | 1617.3 |
+|               3 |  64.6 | 113   |  69.2 | 378.5 |  144.6 |
+|               4 | 187.2 |  39.7 |  57.9 |  64.8 |  248.9 |
+|               5 |  81.4 |  63.4 |  62.3 |  59   |   61.8 |
+
+Here, I set the index to the number of ingredients, the columns to the ratings, and the values to the average minutes, and showed only the top 5 rows. This shows the average cooking time for recipes with a given number of ingredients and rating. Under the 5 star rating, there is an obscenely large value of 1617.3 minutes, which suggests there may be outliers of recipes that take large amounts of time to make.
+
+<iframe
+  src="assets/pivot_ingredients_rating_minutes.html"
+  width="1000"
+  height="800"
+  frameborder="0"
+></iframe>
+
+This graph visually shows the pivot table, where for the most part, most of the data makes sense, besides the fact that there is a recipe that takes 37 ingredients, and that there are recipes that are skewing the data with extremely large outliers in the minutes column.
