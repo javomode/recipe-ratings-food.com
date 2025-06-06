@@ -33,7 +33,8 @@ Before dropping and selecting specific values, the dataset that will be used con
 | 1 in canada chocolate chip cookies   | 453467 |        45 |          1848091 | 2011-04-11  | ['calories (595.1)', 'total fat (46.0)', 'sugar (211.0)', 'sodium (22.0)', 'protein (13.0)', 'saturated fat (51.0)', 'carbohydrates (26.0)'] |        12 |              11 |    424680 |      453467 | 2012-01-26 |        5 |            5 |
 | 412 broccoli casserole               | 306168 |        40 |            50969 | 2008-05-30  | ['calories (194.8)', 'total fat (20.0)', 'sugar (6.0)', 'sodium (32.0)', 'protein (22.0)', 'saturated fat (36.0)', 'carbohydrates (3.0)']    |         6 |               9 |     29782 |      306168 | 2008-12-31 |        5 |            5 |
 
-#### Univariate Analysis
+### Univariate Analysis
+
 <iframe
   src="assets/most_ingredients.html"
   width="1000"
@@ -52,7 +53,7 @@ This bar plot shows the most frequently used ingredients across all recipes in t
 
 This bar plot displays the least frequently used tags in the dataset. These rare tags represent niche or highly specific recipe categories and ingredients, a particular one being: Throw the ultimate fiesta with this sopaipillas recipe from Food.com, which is not longer even a tag anymore, but almost a description. The specificity and uniqueness of these tags highlight less common culinary themes or specialized dishes.
 
-#### Bivariate Analysis
+### Bivariate Analysis
 
 <iframe
   src="assets/time_vs_rating.html"
@@ -65,7 +66,7 @@ This graph details the average rating by binned amounts of minutes that recipes 
 
 Across all of these graphs, there is no alarming/interesting trend, besides the fact that across all of these distributions, the average rating lied around 4.6-4.7 no matter the number of steps, the number of ingredients, or the number of minutes the recipes called for.
 
-#### Interesting Aggregate
+### Interesting Aggregate
 
 |   n_ingredients |   1.0 |   2.0 |   3.0 |   4.0 |    5.0 |
 |----------------:|------:|------:|------:|------:|-------:|
@@ -95,38 +96,78 @@ I believe some columns in this dataset may be NMAR:
 
 To assess whether these are truly NMAR or just MAR, there would need to be more data on user behavior, such as whether they viewed or made the recipe without leaving feedback.
 
-#### Missingness Dependency
-
+### Missingness Dependency
 I explored whether the missingness of the rating column depends on the minutes column, which would suggest it is not missing completely at random.
 
-##### Permutation Test Setup:
+Permutation Test Setup:
 Missingness indicator: Created a binary column where 1 indicates a missing rating, and 0 indicates a present value.
 
-Test statistic:
-
-mean(minutes when rating is missing) − mean(minutes when rating is present)
-
+Test statistic: mean(minutes when rating is missing) − mean(minutes when rating is present)
 
 Null hypothesis (H₀): The missingness of rating is independent of minutes.
+
 Alternative hypothesis (H₁): The missingness of rating is dependent on minutes.
 
 Procedure:
-1. Permuted the missingness indicator multiple times.
-2. Computed the test statistic for each permutation.
-3. Compared the observed difference to the empirical distribution of permuted differences using a two-tailed test at a significance level of 0.05.
+
+Permuted the missingness indicator multiple times.
+
+Computed the test statistic for each permutation.
+
+Compared the observed difference to the empirical distribution of permuted differences using a two-tailed test at a significance level of 0.05.
 
 Results & Interpretation:
-The empirical distribution of permuted differences clusters tightly around 0, while the observed difference lies well outside the central region.
+The empirical distribution of permuted differences clusters around zero, and the observed difference falls outside the range of permuted values. However, the corresponding p-value is approximately 0.122, which is not statistically significant at the 0.05 level.
 
-The corresponding p-value is very small, leading allowing me to reject the null hypothesis.
+Therefore, there is no strong evidence that the missingness of rating depends on the minutes column. This suggests that missingness in rating is not related to minutes and could be either Missing Completely At Random (MCAR) or Not Missing At Random (NMAR) with respect to other variables.
 
-This suggests that the missingness of rating is not independent of minutes, providing evidence that it may be NMAR—for instance, users may be less likely to rate recipes that take unusually long or short times to prepare.
+This plot shows the distribution of permuted differences in minutes, with the red line marking the observed difference. Since the observed value lies outside the permuted range but the p-value is not significant, the relationship between missingness of rating and minutes is inconclusive.
 
-Additionally, a box plot comparing minutes for missing vs. non-missing ratings shows a noticeable difference in distributions, reinforcing this conclusion.
+<iframe src="assets/permutation_missing_rating_vs_minutes.html" width="1000" height="800" frameborder="0" ></iframe>
+
+## Hypothesis Testing
+
+Question: Is there a relationship between calories and rating?
+
+1. Hypotheses
+
+* Null hypothesis (H₀): There is no linear correlation between recipe calories and average rating (ρ = 0).
+* Alternative hypothesis (H₁): There is a linear correlation between recipe calories and average rating (ρ ≠ 0).
+
+These hypotheses are appropriate because we are specifically testing whether a linear relationship exists between two numerical variables—calories and rating.
+
+2. Test Statistic
+
+I used Pearson’s correlation coefficient (Pearson’s r) as the test statistic. This measures the strength and direction of a linear relationship between two continuous variables. It is a widely used and interpretable measure of linear association, making it a good choice when a linear relationship is plausible.
+
+4. Procedure
+
+	1. Computed the observed Pearson’s r between calories and rating.
+
+	2. Shuffled the rating column to simulate the null hypothesis of no relationship.
+
+	3. Recomputed Pearson’s r for each permutation.
+
+	4. Repeated this process many times (e.g., 1000 iterations) to build a null distribution.
+
+	5. Calculated the p-value as the proportion of permuted correlations that are as or more extreme than the observed one.
+
+	5. Used a significance level of α = 0.05 for decision-making.
+
+5. Result & Conclusion
+
+* Observed Pearson’s r: -0.009
+* P-value: 0.0005
+
+Since the p-value is greater than 0.05, we fail to reject the null hypothesis. This means that we do not have strong evidence of a significant linear relationship between calories and average rating in this dataset.
+
+This does not prove that no relationship exists, but rather that the observed linear correlation could plausibly have arisen by chance under the null hypothesis.
 
 <iframe
-  src="assets/missing_rating_minutes_distribution.html"
+  src="assets/permutation_calorie_vs_rating.html"
   width="1000"
   height="800"
   frameborder="0"
 ></iframe>
+
+Provided is also a plot, showing the distribution of the permuted values, with the dashed red lines showing the negative and positive observed r-values.
