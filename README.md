@@ -39,3 +39,7 @@ Before dropping and selecting specific values, the dataset that will be used con
   height="600"
   frameborder="0"
 ></iframe>
+
+This bar plot shows the most frequently used ingredients across all recipes in the dataset. Unsurprisingly, common staples like salt, onions, and garlic appear most often, reflecting their widespread use in a variety of dishes.
+
+
