@@ -85,3 +85,48 @@ Here, I set the index to the number of ingredients, the columns to the ratings, 
 ></iframe>
 
 This graph visually shows the pivot table, where for the most part, most of the data makes sense, besides the fact that there is a recipe that takes 37 ingredients, and that there are recipes that are skewing the data with extremely large outliers in the minutes column.
+
+## Assessment of Missingnesss
+
+I believe some columns in this dataset may be NMAR:
+* description may be NMAR because users who are less confident or disinterested might skip writing one.
+* rating could be NMAR if users avoid rating bad recipes rather than leaving low scores.
+* reviews might be NMAR since users often leave comments only when they feel strongly—either very positively or negatively.
+
+To assess whether these are truly NMAR or just MAR, there would need to be more data on user behavior, such as whether they viewed or made the recipe without leaving feedback.
+
+#### Missingness Dependency
+
+I explored whether the missingness of the rating column depends on the minutes column, which would suggest it is not missing completely at random.
+
+##### Permutation Test Setup:
+Missingness indicator: Created a binary column where 1 indicates a missing rating, and 0 indicates a present value.
+
+Test statistic:
+
+mean(minutes when rating is missing) − mean(minutes when rating is present)
+
+
+Null hypothesis (H₀): The missingness of rating is independent of minutes.
+Alternative hypothesis (H₁): The missingness of rating is dependent on minutes.
+
+Procedure:
+1. Permuted the missingness indicator multiple times.
+2. Computed the test statistic for each permutation.
+3. Compared the observed difference to the empirical distribution of permuted differences using a two-tailed test at a significance level of 0.05.
+
+Results & Interpretation:
+The empirical distribution of permuted differences clusters tightly around 0, while the observed difference lies well outside the central region.
+
+The corresponding p-value is very small, leading allowing me to reject the null hypothesis.
+
+This suggests that the missingness of rating is not independent of minutes, providing evidence that it may be NMAR—for instance, users may be less likely to rate recipes that take unusually long or short times to prepare.
+
+Additionally, a box plot comparing minutes for missing vs. non-missing ratings shows a noticeable difference in distributions, reinforcing this conclusion.
+
+<iframe
+  src="assets/missing_rating_minutes_distribution.html"
+  width="1000"
+  height="800"
+  frameborder="0"
+></iframe>
