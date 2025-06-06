@@ -92,7 +92,7 @@ This graph visually shows the pivot table, where for the most part, most of the 
 I believe some columns in this dataset may be NMAR:
 * description may be NMAR because users who are less confident or disinterested might skip writing one.
 * rating could be NMAR if users avoid rating bad recipes rather than leaving low scores.
-* reviews might be NMAR since users often leave comments only when they feel strongly—either very positively or negatively.
+* reviews might be NMAR since users often leave comments only when they feel strongly-either very positively or negatively.
 
 To assess whether these are truly NMAR or just MAR, there would need to be more data on user behavior, such as whether they viewed or made the recipe without leaving feedback.
 
@@ -134,7 +134,7 @@ Question: Is there a relationship between calories and rating?
 * Null hypothesis (H₀): There is no linear correlation between recipe calories and average rating (ρ = 0).
 * Alternative hypothesis (H₁): There is a linear correlation between recipe calories and average rating (ρ ≠ 0).
 
-These hypotheses are appropriate because we are specifically testing whether a linear relationship exists between two numerical variables—calories and rating.
+These hypotheses are appropriate because we are specifically testing whether a linear relationship exists between two numerical variables-calories and rating.
 
 2. Test Statistic
 
@@ -175,7 +175,7 @@ Provided is also a plot, showing the distribution of the permuted values, with t
 ## Prediction Problem
 
 Prediction Problem and Type
-I aim to predict a recipe’s rating based on basic properties of the recipe. This is a regression problem, since the response variable-rating—-is continuous.
+I aim to predict a recipe’s rating based on basic properties of the recipe. This is a regression problem, since the response variable-rating, is continuous.
 
 Response Variable: rating
 
@@ -204,7 +204,7 @@ Features not used:
 
 Time of Prediction Justification:
 
-All selected features are known at the time the recipe is created and posted. This respects the causality principle—no information from future events (like review behavior or user feedback) is used during model training.
+All selected features are known at the time the recipe is created and posted. This respects the causality principle-no information from future events (like review behavior or user feedback) is used during model training.
 
 Evaluation Metric
 Metric: RMSE (Root Mean Squared Error)
@@ -213,3 +213,72 @@ Justification:
 
 * RMSE penalizes large errors more heavily than small ones, making it sensitive to significant deviations.
 * It provides a clear interpretation in the same units as the response variable (ratings), making it easier to explain model performance.
+
+## Model Description & Results
+
+| Feature | Type | Description |
+| ----------- | ----------- |
+| minutes | Quantitative | Represents total preparation time. Due to extreme outliers and skew, this feature was log-transformed using log(minutes + 1) |
+| n_ingredients | Quantitative | The number of ingredients in the recipe, representing potential complexity |
+| n_steps | Quantitative | The number of preparation steps, also used as a measure of complexity |
+
+There are no ordinal or nominal features in this baseline model, so no encoding was required. Only a standard scaler was used on all three features, as this baseline model did not use any other categorical features.
+
+Model Performance
+RMSE = 0.7139
+
+This means that, on average, the model's predicted rating differs from the actual rating by approximately 0.71 stars. Given that ratings are typically measured on a 1 to 5 scale, this error is rather large, suggesting there is a lot of room for improvement.
+
+Evaluation
+The current model provides a basic approximation of ratings using simple, numeric recipe characteristics. While useful as a baseline, the model does not capture more complex patterns or higher-order interactions.
+
+Ideas for Improvement
+
+* Categorical Time Buckets: The minutes feature may not linearly influence rating. Grouping it into cooking time categories (short, medium, long) could capture user preferences better than the raw or log-transformed numerical values.
+	* Short: < 30 minutes
+	* Medium: 30 minutes to 3 hours
+	* Long: > 3 hours
+
+* Recipe Complexity: Instead of using n_ingredients and n_steps directly, a derived feature representing overall complexity could be created. For example:
+	* Easy: score < 20 (where score = n_ingredients + n_steps)
+	* Medium: 20–40
+	* Hard: > 40
+
+Nutrition Features: Although detailed nutrition information is present, it is difficult to interpret without serving size information. Future work could involve engineering features like macro ratios (e.g., fat-to-protein, sugar-per-calorie), though this must be done carefully to avoid misinterpretation.
+
+Planned Next Steps
+* Transform minutes into a categorical variable to capture rough distinctions in preparation time.
+* Explore feature engineering based on complexity.
+* Compare these enhanced models against the baseline using RMSE for consistency.
+
+## Final Model and Feature Enhancements
+
+New Features and Rationale
+To improve the baseline model, I added:
+
+* time_category (short, medium, long): captures non-linear effects of preparation time
+* complexity (easy, medium, hard): summarizes recipe difficulty based on steps and ingredients
+
+These features were made with the idea that they would be more reflective of how users likely rate recipes, based on convenience and complexity, rather than raw numerical values alone.
+
+Model and Evaluation
+Model: Random Forest Regressor
+
+Why Random Forest: This model handles non-linear relationships and feature interactions well without requiring explicit transformations. It was a better fit for capturing complex relationships in recipe data than linear regression.
+	* I also used an intermediary lasso regression, which showed that the coefficients for time_category and complexity were both zero when the model was predictinng rating linearly from the featuers.
+ 	* The change to random forest was in response to finding that there was not a strong linear relationship.
+
+Encoding: One-hot encoding was applied to categorical features
+
+Features Used: n_ingredients, n_steps, time_category, complexity
+
+Hyperparameter Tuning
+I used randomized search with cross-validation to tune key hyperparameters (n_estimators, max_depth, etc.). This was more computationally efficient than grid search and still allowed for meaningful performance gains.
+
+Performance
+Baseline Linear Regression RMSE: 0.7139
+
+Final Random Forest RMSE: 0.7075
+
+Conclusion
+The Random Forest model, combined with engineered categorical features, significantly improved predictive performance. The lower RMSE suggests it better captures the true structure of the data and how users rate recipes based on time and complexity.
