@@ -33,13 +33,21 @@ Before dropping and selecting specific values, the dataset that will be used con
 | 1 in canada chocolate chip cookies   | 453467 |        45 |          1848091 | 2011-04-11  | ['calories (595.1)', 'total fat (46.0)', 'sugar (211.0)', 'sodium (22.0)', 'protein (13.0)', 'saturated fat (51.0)', 'carbohydrates (26.0)'] |        12 |              11 |    424680 |      453467 | 2012-01-26 |        5 |            5 |
 | 412 broccoli casserole               | 306168 |        40 |            50969 | 2008-05-30  | ['calories (194.8)', 'total fat (20.0)', 'sugar (6.0)', 'sodium (32.0)', 'protein (22.0)', 'saturated fat (36.0)', 'carbohydrates (3.0)']    |         6 |               9 |     29782 |      306168 | 2008-12-31 |        5 |            5 |
 
+#### Univariate Analysis
 <iframe
   src="assets/most_ingredients.html"
-  width="800"
-  height="600"
+  width="1000"
+  height="800"
   frameborder="0"
 ></iframe>
 
-This bar plot shows the most frequently used ingredients across all recipes in the dataset. Unsurprisingly, common staples like salt, onions, and garlic appear most often, reflecting their widespread use in a variety of dishes.
+This bar plot shows the most frequently used ingredients across all recipes in the dataset. Unsurprisingly, common staples like salt, butter, and sugar appear most often, reflecting their widespread use in a variety of recipes.
 
+<iframe
+  src="assets/least_tags.html"
+  width="1000"
+  height="800"
+  frameborder="0"
+></iframe>
 
+This bar plot displays the least frequently used tags in the dataset. These rare tags represent niche or highly specific recipe categories and ingredients, a particular one being: Throw the ultimate fiesta with this sopaipillas recipe from Food.com, which is not longer even a tag anymore, but almost a description. The specificity and uniqueness of these tags highlight less common culinary themes or specialized dishes.
