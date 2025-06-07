@@ -337,7 +337,7 @@ RMSE: Root Mean Squared Error remains the evaluation metric, consistent with the
 
 ### Test Statistic
 
-* RMSE<sub>long</sub> - RMSE<sub>short</sub>$
+* RMSE<sub>long</sub> - RMSE<sub>short</sub>
 
 A positive observed test statistic would suggest worse performance on longer recipes.
 
@@ -361,3 +361,15 @@ This plot shows the distribution of RMSE differences under the null hypothesis t
 The observed RMSE difference between long and short recipe groups was larger than all differences obtained through permutation, resulting in a p-value of 0.00. Since this is below the significance level of 0.05, we reject the null hypothesis.
 
 This provides strong statistical evidence that the model performs worse on long recipes compared to short ones. In other words, there is an issue of fairness, as prediction error is not consistent across groups defined by recipe duration.
+
+## Conclusion
+
+In this project, I explored how recipe characteristics relate to user ratings and developed a regression model to predict recipe ratings using features that are available at the time a recipe is posted. The analysis began with an investigation into missing data, which suggested that missingness in the rating column was likely not missing completely at random, particularly with respect to preparation time.
+
+After performing bivariate and univariate analyses, I framed a prediction problem using a regression approach, with rating as the response variable. Initial features included minutes, n_steps, and n_ingredients, and the baseline model used linear regression evaluated by RMSE. To improve predictive performance, I added engineered features such as categorized cooking time (short, medium, long) and a complexity score derived from steps and ingredients. These features better aligned with how users might perceive and rate recipes in the real world.
+
+To better capture non-linear relationships and interactions between features, I transitioned to a Random Forest Regressor. This model improved performance, reducing the RMSE from 0.7139 to 0.7075. Hyperparameters were selected using randomized search, as grid search proved computationally intensive given the model complexity.
+
+Finally, I conducted a fairness analysis using a permutation test to evaluate whether the model performed equally well across different types of recipes. The results revealed that the model exhibited worse performance on longer recipes, with a statistically significant difference in RMSE between short and long recipe groups. This highlights a potential fairness concern, as prediction error is not evenly distributed.
+
+Future improvements could include incorporating more nuanced nutritional or ingredient-level data, such as serving size level nutritional information per recipe, or using more NLP processes to utilize more data from the dataset, such as performing sentiment analysis on user reviews.
