@@ -224,15 +224,17 @@ Justification:
 
 There are no ordinal or nominal features in this baseline model, so no encoding was required. Only a standard scaler was used on all three features, as this baseline model did not use any other categorical features.
 
-Model Performance
+### Model Performance
+
 RMSE = 0.7139
 
 This means that, on average, the model's predicted rating differs from the actual rating by approximately 0.71 stars. Given that ratings are typically measured on a 1 to 5 scale, this error is rather large, suggesting there is a lot of room for improvement.
 
-Evaluation
+### Evaluation
+
 The current model provides a basic approximation of ratings using simple, numeric recipe characteristics. While useful as a baseline, the model does not capture more complex patterns or higher-order interactions.
 
-Ideas for Improvement
+### Ideas for Improvement
 
 * Categorical Time Buckets: The minutes feature may not linearly influence rating. Grouping it into cooking time categories (short, medium, long) could capture user preferences better than the raw or log-transformed numerical values.
 	* Short: < 30 minutes
@@ -244,16 +246,18 @@ Ideas for Improvement
 	* Medium: 20–40
 	* Hard: > 40
 
-Nutrition Features: Although detailed nutrition information is present, it is difficult to interpret without serving size information. Future work could involve engineering features like macro ratios (e.g., fat-to-protein, sugar-per-calorie), though this must be done carefully to avoid misinterpretation.
+### Nutrition Features
 
-Planned Next Steps
+Although detailed nutrition information is present, it is difficult to interpret without serving size information. Future work could involve engineering features like macro ratios (e.g., fat-to-protein, sugar-per-calorie), though this must be done carefully to avoid misinterpretation.
+
+### Planned Next Steps
 * Transform minutes into a categorical variable to capture rough distinctions in preparation time.
 * Explore feature engineering based on complexity.
 * Compare these enhanced models against the baseline using RMSE for consistency.
 
 ## Final Model and Feature Enhancements
 
-New Features and Rationale
+### New Features and Rationale
 
 To improve the baseline model, I added:
 
@@ -273,17 +277,17 @@ Why Random Forest: This model handles non-linear relationships and feature inter
 
 Encoding: One-hot encoding was applied to categorical features
 
-Features Used: n_ingredients, n_steps, time_category, complexity
+Features Used: minutes, n_ingredients, n_steps, time_category, complexity
 
-Hyperparameter Tuning
+### Hyperparameter Tuning
 
 I used randomized search with cross-validation to tune key hyperparameters (n_estimators, max_depth, etc.). This was more computationally efficient than grid search and still allowed for meaningful performance gains.
 
-Performance
+### Performance
 
 * Baseline Linear Regression RMSE: 0.7139
 * Final Random Forest RMSE: 0.7075
 
-Conclusion
+### Conclusion
 
 The Random Forest model, combined with engineered categorical features, significantly improved predictive performance. The lower RMSE suggests it better captures the true structure of the data and how users rate recipes based on time and complexity.
