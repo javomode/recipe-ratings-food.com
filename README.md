@@ -332,12 +332,12 @@ RMSE: Root Mean Squared Error remains the evaluation metric, consistent with the
 
 ### Hypotheses:
 
-* Null Hypothesis ($H_0$): The model performs equally for both groups. Any difference in RMSE is due to chance.
-* Alternative Hypothesis ($H_1$): The model performs worse (higher RMSE) for long-time recipes than for short-time ones.
+* Null Hypothesis (H₀): The model performs equally for both groups. Any difference in RMSE is due to chance.
+* Alternative Hypothesis (H₁): The model performs worse (higher RMSE) for long-time recipes than for short-time ones.
 
 ### Test Statistic
 
-* RMSE~long~ - RMSE~short~$
+* RMSE<sub>long</sub> - RMSE<sub>short</sub>$
 
 A positive observed test statistic would suggest worse performance on longer recipes.
 
