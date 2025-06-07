@@ -109,64 +109,68 @@ Permutation Test Setup:
 
 Missingness indicator: Created a binary column where 1 indicates a missing rating, and 0 indicates a present value.
 
-Test statistic: mean(minutes when rating is missing) − mean(minutes when rating is present)
+### Hypotheses
 
 * Null hypothesis (H₀): The missingness of rating is independent of minutes.
 * Alternative hypothesis (H₁): The missingness of rating is dependent on minutes.
 
-Procedure:
+### Test statistic
+
+mean(minutes when rating is missing) − mean(minutes when rating is present)
+
+### Procedure
 
 1. Permuted the missingness indicator multiple times.
 2. Computed the test statistic for each permutation.
 3. Compared the observed difference to the empirical distribution of permuted differences using a two-tailed test at a significance level of 0.05.
 
-Results & Interpretation:
+### Plot
+
+This plot shows the distribution of permuted differences in minutes, with the red line marking the observed difference. Since the observed value lies outside the permuted range but the p-value is not significant, the relationship between missingness of rating and minutes is inconclusive.
+
+<iframe 
+	src="assets/permutation_missing_rating_vs_minutes.html" 
+	width="1000" 
+	height="800" 
+	frameborder="0" 
+></iframe>
+
+### Results
 
 The empirical distribution of permuted differences clusters around zero, and the observed difference falls outside the range of permuted values. However, the corresponding p-value is approximately 0.122, which is not statistically significant at the 0.05 level.
 
 Therefore, there is no strong evidence that the missingness of rating depends on the minutes column. This suggests that missingness in rating is not related to minutes and could be either Missing Completely At Random (MCAR) or Not Missing At Random (NMAR) with respect to other variables.
 
-This plot shows the distribution of permuted differences in minutes, with the red line marking the observed difference. Since the observed value lies outside the permuted range but the p-value is not significant, the relationship between missingness of rating and minutes is inconclusive.
-
-<iframe src="assets/permutation_missing_rating_vs_minutes.html" width="1000" height="800" frameborder="0" ></iframe>
-
 ## Hypothesis Testing
 
 Question: Is there a relationship between calories and rating?
 
-1. Hypotheses
+### Hypotheses
 
 * Null hypothesis (H₀): There is no linear correlation between recipe calories and average rating (ρ = 0).
 * Alternative hypothesis (H₁): There is a linear correlation between recipe calories and average rating (ρ ≠ 0).
 
 These hypotheses are appropriate because we are specifically testing whether a linear relationship exists between two numerical variables-calories and rating.
 
-2. Test Statistic
+### Test Statistic
 
 I used Pearson’s r as the test statistic. This measures the strength and direction of a linear relationship between two continuous variables. It is a widely used and interpretable measure of linear association, making it a good choice when a linear relationship is plausible.
 
-4. Procedure
+### Procedure
 
-	1. Computed the observed Pearson’s r between calories and rating.
+1. Computed the observed Pearson’s r between calories and rating.
 
-	2. Shuffled the rating column to simulate the null hypothesis of no relationship.
+2. Shuffled the rating column to simulate the null hypothesis of no relationship.
 
-	3. Recomputed Pearson’s r for each permutation.
+3. Recomputed Pearson’s r for each permutation.
 
-	4. Repeated this process many times (e.g., 1000 iterations) to build a null distribution.
+4. Repeated this process many times (e.g., 1000 iterations) to build a null distribution.
 
-	5. Calculated the p-value as the proportion of permuted correlations that are as or more extreme than the observed one.
+5. Calculated the p-value as the proportion of permuted correlations that are as or more extreme than the observed one.
 
-	5. Used a significance level of α = 0.05 for decision-making.
+5. Used a significance level of α = 0.05 for decision-making.
 
-5. Result & Conclusion
-
-* Observed Pearson’s r: -0.009
-* P-value: 0.0005
-
-Since the p-value is greater than 0.05, we fail to reject the null hypothesis. This means that we do not have strong evidence of a significant linear relationship between calories and average rating in this dataset.
-
-This does not prove that no relationship exists, but rather that the observed linear correlation could plausibly have arisen by chance under the null hypothesis.
+### Plot
 
 <iframe
   src="assets/permutation_calorie_vs_rating.html"
@@ -176,6 +180,15 @@ This does not prove that no relationship exists, but rather that the observed li
 ></iframe>
 
 Provided is also a plot, showing the distribution of the permuted values, with the dashed red lines showing the negative and positive observed r-values.
+
+### Results
+
+* Observed Pearson’s r: -0.009
+* P-value: 0.0005
+
+Since the p-value is greater than 0.05, we fail to reject the null hypothesis. This means that we do not have strong evidence of a significant linear relationship between calories and average rating in this dataset.
+
+This does not prove that no relationship exists, but rather that the observed linear correlation could plausibly have arisen by chance under the null hypothesis.
 
 ## Prediction Problem
 
@@ -300,6 +313,51 @@ I used randomized search with cross-validation to tune key hyperparameters (n_es
 * Baseline Linear Regression RMSE: 0.7139
 * Final Random Forest RMSE: 0.7075
 
-### Conclusion
+### Results
 
-The Random Forest model, combined with engineered categorical features, improved predictive performance, though not by much. The lower RMSE suggests it better captures the true structure of the data and how users rate recipes based on time and complexity.
+The Random Forest model, combined with engineered categorical features, improved predictive performance, though not by much, by only ~0.0064. The lower RMSE suggests it better captures the true structure of the data and how users rate recipes based on time and complexity.
+
+## Fairness Analysis
+
+To assess whether the final model (Random Forest Regressor, RMSE = 0.7075) treats all recipe types fairly, I conducted a permutation test comparing model performance on short versus long recipes.
+
+### Group Definitions:
+
+* Group X: Recipes with short cooking times (log-transformed minutes < median)
+* Group Y: Recipes with long cooking times (log-transformed minutes ≥ median)
+
+### Evaluation Metric:
+
+RMSE: Root Mean Squared Error remains the evaluation metric, consistent with the rest of the analysis.
+
+### Hypotheses:
+
+* Null Hypothesis ($H_0$): The model performs equally for both groups. Any difference in RMSE is due to chance.
+* Alternative Hypothesis ($H_1$): The model performs worse (higher RMSE) for long-time recipes than for short-time ones.
+
+### Test Statistic
+
+* RMSE~long~ - RMSE~short~$
+
+A positive observed test statistic would suggest worse performance on longer recipes.
+
+### Significance Level:
+
+* α = 0.05
+
+Provided is also a plot, showing the distribution of the permuted values, with the dashed red lines showing the negative and positive observed r-values.
+
+<iframe 
+	src="assets/fairness_permutation_RMSE_distribution.html" 
+	width="1000" 
+	height="800" 
+	frameborder="0" 
+></iframe>
+
+This plot shows the distribution of RMSE differences under the null hypothesis that model performance is equal for short and long recipes. The red dashed line marks the observed RMSE difference, which lies far to the right of the permuted values, indicating significantly worse performance on long recipes.
+
+### Results
+
+The observed RMSE difference between long and short recipe groups was larger than all differences obtained through permutation, resulting in a p-value of 0.00. Since this is below the significance level of 0.05, we reject the null hypothesis.
+
+This provides strong statistical evidence that the model performs worse on long recipes compared to short ones. In other words, there is an issue of fairness, as prediction error is not consistent across groups defined by recipe duration.
