@@ -27,6 +27,8 @@ Before dropping and selecting specific values, the dataset that will be used con
 4. I formatted the nutrition, ingredients, and tags columns to make them easier to work with. 
 	* For example, nutrition values were converted from raw strings that looked like lists, actual lists of strings:
 
+Here, I provide the first 3 rows of the dataset I work with, not showing the description, tags, and review columns, all of which can be extensive in length and make it difficult to display the data.
+
 | name                                 |     id |   minutes |   contributor_id | submitted   | nutrition                                                                                                                                    |   n_steps |   n_ingredients |   user_id |   recipe_id | date       |   rating |   avg_rating |
 |:-------------------------------------|-------:|----------:|-----------------:|:------------|:---------------------------------------------------------------------------------------------------------------------------------------------|----------:|----------------:|----------:|------------:|:-----------|---------:|-------------:|
 | 1 brownies in the world    best ever | 333281 |        40 |           985201 | 2008-10-27  | ['calories (138.4)', 'total fat (10.0)', 'sugar (50.0)', 'sodium (3.0)', 'protein (3.0)', 'saturated fat (19.0)', 'carbohydrates (6.0)']     |        10 |               9 |    386585 |      333281 | 2008-11-19 |        4 |            4 |
@@ -51,7 +53,11 @@ This bar plot shows the most frequently used ingredients across all recipes in t
   frameborder="0"
 ></iframe>
 
-This bar plot displays the least frequently used tags in the dataset. These rare tags represent niche or highly specific recipe categories and ingredients, a particular one being: Throw the ultimate fiesta with this sopaipillas recipe from Food.com, which is not longer even a tag anymore, but almost a description. The specificity and uniqueness of these tags highlight less common culinary themes or specialized dishes.
+This bar plot displays the least frequently used tags in the dataset. These rare tags represent niche or highly specific recipe categories and ingredients, a particular one being: 
+
+Throw the ultimate fiesta with this sopaipillas recipe from Food.com
+
+which is no longer even a tag anymore, but an entire description. The specificity and uniqueness of these tags highlight less common culinary themes or specialized dishes.
 
 ### Bivariate Analysis
 
@@ -64,7 +70,7 @@ This bar plot displays the least frequently used tags in the dataset. These rare
 
 This graph details the average rating by binned amounts of minutes that recipes called for. In the notebook, I also plotted number of ingredients against average rating, as well as number of ingredients against rating.
 
-Across all of these graphs, there is no alarming/interesting trend, besides the fact that across all of these distributions, the average rating lied around 4.6-4.7 no matter the number of steps, the number of ingredients, or the number of minutes the recipes called for.
+Across all of these graphs, there is no alarming/interesting trend and they all look very similar, besides the fact that across all of these distributions, the average ratings for all numbers of steps, numbers of ingredients, or minutes a recipe took lied around ~4.6 - 4.7.
 
 ### Interesting Aggregate
 
@@ -76,7 +82,7 @@ Across all of these graphs, there is no alarming/interesting trend, besides the 
 |               4 | 187.2 |  39.7 |  57.9 |  64.8 |  248.9 |
 |               5 |  81.4 |  63.4 |  62.3 |  59   |   61.8 |
 
-Here, I set the index to the number of ingredients, the columns to the ratings, and the values to the average minutes, and showed only the top 5 rows. This shows the average cooking time for recipes with a given number of ingredients and rating. Under the 5 star rating, there is an obscenely large value of 1617.3 minutes, which suggests there may be outliers of recipes that take large amounts of time to make.
+Here, I used a pivot table whereset the index to the number of ingredients, the columns to the ratings, and the values to the average minutes, and showed only the top 5 rows. This shows the average cooking time for recipes with a given number of ingredients and rating. Under the 5 star rating, there is an obscenely large value of 1617.3 minutes, which suggests there may be outliers of recipes that take large amounts of time to make.
 
 <iframe
   src="assets/pivot_ingredients_by_rating.html"
@@ -100,23 +106,22 @@ To assess whether these are truly NMAR or just MAR, there would need to be more 
 I explored whether the missingness of the rating column depends on the minutes column, which would suggest it is not missing completely at random.
 
 Permutation Test Setup:
+
 Missingness indicator: Created a binary column where 1 indicates a missing rating, and 0 indicates a present value.
 
 Test statistic: mean(minutes when rating is missing) − mean(minutes when rating is present)
 
-Null hypothesis (H₀): The missingness of rating is independent of minutes.
-
-Alternative hypothesis (H₁): The missingness of rating is dependent on minutes.
+* Null hypothesis (H₀): The missingness of rating is independent of minutes.
+* Alternative hypothesis (H₁): The missingness of rating is dependent on minutes.
 
 Procedure:
 
-Permuted the missingness indicator multiple times.
-
-Computed the test statistic for each permutation.
-
-Compared the observed difference to the empirical distribution of permuted differences using a two-tailed test at a significance level of 0.05.
+1. Permuted the missingness indicator multiple times.
+2. Computed the test statistic for each permutation.
+3. Compared the observed difference to the empirical distribution of permuted differences using a two-tailed test at a significance level of 0.05.
 
 Results & Interpretation:
+
 The empirical distribution of permuted differences clusters around zero, and the observed difference falls outside the range of permuted values. However, the corresponding p-value is approximately 0.122, which is not statistically significant at the 0.05 level.
 
 Therefore, there is no strong evidence that the missingness of rating depends on the minutes column. This suggests that missingness in rating is not related to minutes and could be either Missing Completely At Random (MCAR) or Not Missing At Random (NMAR) with respect to other variables.
@@ -138,7 +143,7 @@ These hypotheses are appropriate because we are specifically testing whether a l
 
 2. Test Statistic
 
-I used Pearson’s correlation coefficient (Pearson’s r) as the test statistic. This measures the strength and direction of a linear relationship between two continuous variables. It is a widely used and interpretable measure of linear association, making it a good choice when a linear relationship is plausible.
+I used Pearson’s r as the test statistic. This measures the strength and direction of a linear relationship between two continuous variables. It is a widely used and interpretable measure of linear association, making it a good choice when a linear relationship is plausible.
 
 4. Procedure
 
@@ -174,18 +179,20 @@ Provided is also a plot, showing the distribution of the permuted values, with t
 
 ## Prediction Problem
 
-Prediction Problem and Type
+### Prediction Problem and Type
+
 I aim to predict a recipe’s rating based on basic properties of the recipe. This is a regression problem, since the response variable-rating, is continuous.
 
-Response Variable: rating
+### Response Variable: 
+* rating
+* Rating is a key indicator of a recipe's success and user satisfaction. Predicting ratings allows us to estimate user preferences for recipes even before they receive reviews.
 
-Justification: Rating is a key indicator of a recipe's success and user satisfaction. Predicting ratings allows us to estimate user preferences for recipes even before they receive reviews.
+### Model Type: 
+* Linear Regression
+*Linear regression is a simple, interpretable baseline model that assumes a linear relationship between the features and the target.
 
-Model Type: Linear Regression
+### Features Used for Prediction:
 
-Linear regression is a simple, interpretable baseline model that assumes a linear relationship between the features and the target.
-
-Features Used for Prediction:
 The following features are available at the time a recipe is posted, which makes them valid predictors:
 
 * minutes: The total time required to prepare the recipe.
@@ -197,20 +204,17 @@ These are all features that:
 1. Are available before any user ratings exist, and
 2. Offer interpretable, numeric inputs that may influence a user’s decision to rate highly or not.
 
-Features not used:
+### Features not used:
 
 * ID columns (e.g., user_id, recipe_id) are ignored because their numeric values do not have meaningful or predictive relationships with the rating.
 * Dates (submitted, review_date) are excluded because they are either not available at the time of recipe creation or offer little predictive value without additional context.
 
-Time of Prediction Justification:
+### Time of Prediction Justification:
 
 All selected features are known at the time the recipe is created and posted. This respects the causality principle-no information from future events (like review behavior or user feedback) is used during model training.
 
-Evaluation Metric
-Metric: RMSE (Root Mean Squared Error)
-
-Justification:
-
+### Evaluation Metric
+* Metric: RMSE (Root Mean Squared Error)
 * RMSE penalizes large errors more heavily than small ones, making it sensitive to significant deviations.
 * It provides a clear interpretation in the same units as the response variable (ratings), making it easier to explain model performance.
 
@@ -272,16 +276,24 @@ Model: Random Forest Regressor
 
 Why Random Forest: This model handles non-linear relationships and feature interactions well without requiring explicit transformations. It was a better fit for capturing complex relationships in recipe data than linear regression.
 
-* I also used an intermediary lasso regression, which showed that the coefficients for time_category and complexity were both zero when the model was predictinng rating linearly from the featuers.
+* Before I had decided to use the random forest regressor, I had tried to use a lasso regression, which showed that the coefficients for time_category and complexity were both zero when the model was predictinng rating linearly from the featuers.
 * The change to random forest was in response to finding that there was not a strong linear relationship.
 
-Encoding: One-hot encoding was applied to categorical features
+### Encoding: 
+* Original standard scaler to quantitative features (minutes, n_ingredients, n_steps)
+* One-hot encoding was applied to categorical features (time_category, complexity)
 
-Features Used: minutes, n_ingredients, n_steps, time_category, complexity
+### Features Used:
+* minutes
+* n_ingredients
+* n_steps
+* time_category
+* complexity
 
 ### Hyperparameter Tuning
 
 I used randomized search with cross-validation to tune key hyperparameters (n_estimators, max_depth, etc.). This was more computationally efficient than grid search and still allowed for meaningful performance gains.
+* Not only that, but grid search finds hyperparameters differently, in that it tries to use all possible combinations while randomized search only searchs a up to a specified number of possible combinations.
 
 ### Performance
 
@@ -290,4 +302,4 @@ I used randomized search with cross-validation to tune key hyperparameters (n_es
 
 ### Conclusion
 
-The Random Forest model, combined with engineered categorical features, significantly improved predictive performance. The lower RMSE suggests it better captures the true structure of the data and how users rate recipes based on time and complexity.
+The Random Forest model, combined with engineered categorical features, improved predictive performance, though not by much. The lower RMSE suggests it better captures the true structure of the data and how users rate recipes based on time and complexity.
